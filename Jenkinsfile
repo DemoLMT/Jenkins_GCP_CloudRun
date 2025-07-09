@@ -70,26 +70,29 @@ pipeline {
 		}
             }
         }
-        stage('Trivy Security Scan'){
-            steps {
-                echo 'Scanning Docker Image with Trivy'
-		sh '''
-  			trivy --severity HIGH,CRITICAL --cache-dir ${WORKSPACE}/.trivy-cache --no-progress --format table -o trivyFSScanReport.html image ${IMAGE_NAME}:${IMAGE_TAG}
-     		'''
-            }
-        }
-	stage('Publish HTML Reports') {
-    		steps {
-        		echo 'Publishing HTML Reports ...'
-        		publishHTML([
-            			allowMissing: false,
-			        alwaysLinkToLastBuild: true,
-			        keepAll: true,
-			        reportDir: '.',
-			        reportFiles: 'FSScanReport.html,trivyFSScanReport.html',
-			        reportName: 'Security Scan Report'
-        	])
-    		}
-	}
+        stage('Trivy FS Scan') {
+    steps {
+        echo 'Scanning File System with Trivy FS ...'
+        sh '''
+            mkdir -p reports
+            trivy fs --format table -o reports/FSScanReport.html .
+        '''
+    }
+}
+
+stage('Publish HTML Reports') {
+    steps {
+        echo 'Publishing HTML Reports ...'
+        publishHTML([
+            allowMissing: false,
+            alwaysLinkToLastBuild: true,
+            keepAll: true,
+            reportDir: 'reports',
+            reportFiles: 'FSScanReport.html',
+            reportName: 'Security Scan Report'
+        ])
+    }
+}
+
 }
 }
