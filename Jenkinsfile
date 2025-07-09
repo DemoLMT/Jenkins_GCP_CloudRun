@@ -78,11 +78,18 @@ pipeline {
      		'''
             }
         }
-	stage('Archive Scan Reports') {
-            steps {
-                echo 'Archiving reports...'
-                archiveArtifacts artifacts: '*.html', allowEmptyArchive: true
-            }
-        }
+	stage('Publish HTML Reports') {
+    		steps {
+        		echo 'Publishing HTML Reports ...'
+        		publishHTML([
+            			allowMissing: false,
+			        alwaysLinkToLastBuild: true,
+			        keepAll: true,
+			        reportDir: '.',
+			        reportFiles: 'FSScanReport.html,trivyFSScanReport.html',
+			        reportName: 'Security Scan Report'
+        	])
+    		}
+	}
 }
 }
