@@ -78,5 +78,11 @@ pipeline {
      		'''
             }
         }
+	stage('Archive Scan Reports') {
+            steps {
+                echo 'Archiving reports...'
+                archiveArtifacts artifacts: '*.html', allowEmptyArchive: true
+            }
+        }
 }
 }
