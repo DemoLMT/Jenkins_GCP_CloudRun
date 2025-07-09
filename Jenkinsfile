@@ -56,20 +56,6 @@ pipeline {
 		}
             }
         }
-        stage('Trivy FS Scan'){
-            steps {
-                echo 'Scanning File System with Trivy FS ...'
-		sh 'trivy fs --format table -o FSScanReport.html'
-            }
-        }
-        stage('Build & Tag Docker Image'){
-            steps {
-                echo 'Building the Java App Docker Image'
-		script {
-			sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
-		}
-            }
-        }
         stage('Trivy FS Scan') {
     	steps {
         	echo 'Scanning File System with Trivy FS ...'
@@ -79,6 +65,14 @@ pipeline {
 	        '''
     	}
 	}
+        stage('Build & Tag Docker Image'){
+            steps {
+                echo 'Building the Java App Docker Image'
+		script {
+			sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+		}
+            }
+        }
 
 	stage('Publish HTML Reports') {
 	    steps {
