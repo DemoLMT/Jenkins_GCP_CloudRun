@@ -72,20 +72,5 @@ pipeline {
 		}
             }
         }
-
-	stage('Publish HTML Reports') {
-	    steps {
-	        echo 'Publishing HTML Reports ...'
-	        publishHTML([
-	            allowMissing: false,
-	            alwaysLinkToLastBuild: true,
-	            keepAll: true,
-	            reportDir: 'reports',
-	            reportFiles: 'FSScanReport.html',
-	            reportName: 'Security Scan Report'
-	        ])
-	    }
-	}
-
 }
 }
