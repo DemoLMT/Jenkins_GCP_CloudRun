@@ -71,28 +71,28 @@ pipeline {
             }
         }
         stage('Trivy FS Scan') {
-    steps {
-        echo 'Scanning File System with Trivy FS ...'
-        sh '''
-            mkdir -p reports
-            trivy fs --format table -o reports/FSScanReport.html .
-        '''
-    }
-}
+    	steps {
+        	echo 'Scanning File System with Trivy FS ...'
+        	sh '''
+	            mkdir -p reports
+	            trivy fs --format table -o reports/FSScanReport.html .
+	        '''
+    	}
+	}
 
-stage('Publish HTML Reports') {
-    steps {
-        echo 'Publishing HTML Reports ...'
-        publishHTML([
-            allowMissing: false,
-            alwaysLinkToLastBuild: true,
-            keepAll: true,
-            reportDir: 'reports',
-            reportFiles: 'FSScanReport.html',
-            reportName: 'Security Scan Report'
-        ])
-    }
-}
+	stage('Publish HTML Reports') {
+	    steps {
+	        echo 'Publishing HTML Reports ...'
+	        publishHTML([
+	            allowMissing: false,
+	            alwaysLinkToLastBuild: true,
+	            keepAll: true,
+	            reportDir: 'reports',
+	            reportFiles: 'FSScanReport.html',
+	            reportName: 'Security Scan Report'
+	        ])
+	    }
+	}
 
 }
 }
